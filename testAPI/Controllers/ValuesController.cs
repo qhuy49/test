@@ -1,19 +1,22 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using testAPI.Models;
 
 namespace testAPI.Controllers
 {
     public class ValuesController : ApiController
     {
         // GET api/values
-        public IEnumerable<string> Get()
+        public IEnumerable<Employee> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Employee.Employees;
         }
 
         // GET api/values/5
@@ -23,13 +26,21 @@ namespace testAPI.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Employee employeesS)
         {
+
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        public IEnumerable<Employee> Put(string id, [FromBody]Employee employee)
         {
+            var nv = Employee.Employees.FirstOrDefault(n=>n.name == id);
+         //   var obj = JsonSerializer.Deserialize<Employee>(value);
+            
+            nv.cmnd = employee.cmnd;
+            Employee.Employees.Remove(nv);
+            Employee.Employees.Add(employee);
+            return Employee.Employees;
         }
 
         // DELETE api/values/5
